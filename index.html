@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Christopher Welch — Interactive Math &amp; Learning Design</title>
+<style>
+  :root{
+    --bg:#0e1730;--panel:#15213f;--panel2:#1b2a4e;--ink:#eef3f9;--muted:#9db0c8;
+    --teal:#3cc7bd;--teal2:#2c8a8f;--blue:#6aa0ff;--amber:#f4b740;--rule:#27375a;--good:#39c5bb;--bad:#ff6b6b;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+  .wrap{max-width:820px;margin:0 auto;padding:34px 18px 60px}
+  header .kick{color:var(--teal);font-weight:700;letter-spacing:1.6px;text-transform:uppercase;font-size:12px}
+  header h1{font-size:30px;margin:6px 0 2px}
+  header .who{color:var(--muted);font-size:14px}
+  header .links{margin-top:10px;font-size:13px}
+  header .links a{color:var(--blue);text-decoration:none;margin-right:14px}
+  .intro{font-size:16.5px;color:#dde7f2;margin:18px 0 6px}
+  .sec{margin-top:34px}
+  .sec>h2{font-size:13px;letter-spacing:1.4px;text-transform:uppercase;color:var(--teal);border-bottom:1px solid var(--rule);padding-bottom:8px;margin-bottom:6px}
+  .card{background:var(--panel);border:1px solid var(--rule);border-radius:16px;padding:22px;margin:18px 0}
+  .card h3{font-size:20px;margin-bottom:4px}
+  .card .lede{color:var(--muted);font-size:14.5px;margin-bottom:10px}
+  p{margin:10px 0;color:#dde7f2}
+  em{color:#fff;font-style:italic}
+  /* stepper / buttons */
+  .row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+  button.ui{background:var(--panel2);color:var(--ink);border:1px solid var(--rule);border-radius:10px;padding:10px 14px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.15s}
+  button.ui:hover{border-color:var(--teal);color:#fff}
+  button.ui.primary{background:var(--teal);color:#06131a;border-color:var(--teal)}
+  .stagebar button{flex:1;min-width:120px}
+  .stagebar button.active{background:var(--teal);color:#06131a;border-color:var(--teal)}
+  svg{width:100%;height:auto;display:block;margin:6px 0}
+  .figlabel{fill:#eef3f9;font-size:13px;font-weight:700}
+  .figsub{fill:#06131a;font-size:13px;font-weight:700}
+  .narr{min-height:52px;color:#dde7f2;font-size:15.5px;margin-top:6px}
+  .ctrl{display:flex;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}
+  .ctrl label{color:var(--muted);font-size:13px;font-weight:600}
+  input[type=range]{flex:1;min-width:160px;accent-color:var(--teal)}
+  .calc{font-family:"Courier New",monospace;background:#0b1428;border:1px solid var(--rule);border-radius:10px;padding:14px;margin:10px 0;font-size:15px;line-height:1.95}
+  .stair span{opacity:.18;transition:opacity .35s}
+  .stair span.on{opacity:1}
+  .hl{color:var(--amber);font-weight:700}
+  .tl{color:var(--teal);font-weight:700}
+  .reveal{display:none;margin-top:8px}
+  .reveal.show{display:block}
+  /* course case study */
+  .map{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px 0}
+  @media(max-width:560px){.map{grid-template-columns:1fr}}
+  .map .step{background:var(--panel2);border:1px solid var(--rule);border-radius:9px;padding:9px 11px;font-size:13px}
+  .map .step b{color:var(--teal);font-size:11px;display:block;text-transform:uppercase;letter-spacing:.6px}
+  .concept{background:#0b1428;border:1px solid var(--rule);border-left:3px solid var(--teal);border-radius:0 12px 12px 0;padding:16px}
+  .concept h4{color:var(--teal);font-size:15px;margin-bottom:6px}
+  .flow{font-family:"Courier New",monospace;color:var(--amber);font-size:13.5px;margin-top:8px}
+  .quiz .opt{display:block;width:100%;text-align:left;background:var(--panel2);border:1px solid var(--rule);border-radius:10px;padding:12px 14px;margin:7px 0;color:var(--ink);font-size:14.5px;cursor:pointer;transition:.15s}
+  .quiz .opt:hover{border-color:var(--teal)}
+  .quiz .opt.correct{border-color:var(--good);background:rgba(57,197,187,.14)}
+  .quiz .opt.wrong{border-color:var(--bad);background:rgba(255,107,107,.12)}
+  .fb{margin-top:8px;font-size:14px;display:none}
+  .fb.show{display:block}
+  .fb.ok{color:var(--good)} .fb.no{color:#ffb0b0}
+  .tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#06131a;background:var(--teal);padding:3px 9px;border-radius:11px;margin-left:8px;vertical-align:middle}
+  .foot{color:var(--muted);font-size:12.5px;margin-top:34px;border-top:1px solid var(--rule);padding-top:16px}
+  sup{font-size:.7em}
+  .skip{position:absolute;left:-999px;top:0;background:var(--teal);color:#06131a;padding:10px 14px;border-radius:0 0 8px 0;font-weight:700;z-index:20}
+  .skip:focus{left:0}
+  :focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+  @media (prefers-reduced-motion: reduce){*{transition:none !important;animation:none !important}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="wrap" id="main" role="main" tabindex="-1">
+  <header>
+    <div class="kick">Interactive Math · Learning Design</div>
+    <h1>Christopher Welch</h1>
+    <div class="who">Mathematics educator &amp; learning designer · 13 years teaching and examining · M.Ed. EdTech &amp; Instructional Design</div>
+    <div class="links">
+      <a href="https://linkedin.com/in/christopher-d-welch">LinkedIn</a>
+      <a href="https://github.com/cdw3lch">GitHub</a>
+    </div>
+  </header>
+
+  <p class="intro">How I introduce an unfamiliar idea: start from what the learner already knows, make it something they can move and see, and let the formal result fall out of their own reasoning. Three short, interactive samples below — two in math, one a course I designed.</p>
+
+  <!-- ============ MATH 1: COMPLETING THE SQUARE ============ -->
+  <div class="sec"><h2>Interactive · Mathematics</h2></div>
+  <div class="card">
+    <h3>Completing the square, without the recipe</h3>
+    <div class="lede">Most people learn this as steps to memorize. Step through it and watch why the name <em>is</em> the explanation — you're literally completing a square.</div>
+    <div class="row stagebar" id="stages">
+      <button data-s="0" class="active">1 · The pieces</button>
+      <button data-s="1">2 · Rearrange</button>
+      <button data-s="2">3 · What's missing</button>
+      <button data-s="3">4 · Complete it</button>
+    </div>
+    <svg id="fig" viewBox="0 0 520 300" role="img" aria-label="Completing the square, geometrically"></svg>
+    <div class="narr" id="narr" aria-live="polite"></div>
+    <div class="ctrl">
+      <label>Try a different middle term &nbsp;b = <span id="bval">6</span></label>
+      <input type="range" id="b" min="2" max="10" step="2" value="6" aria-label="Middle term b in x squared plus b x">
+    </div>
+    <div class="calc" id="alg" style="text-align:center"></div>
+  </div>
+
+  <!-- ============ MATH 2: NEGATIVE x NEGATIVE ============ -->
+  <div class="card">
+    <h3>Why does a negative times a negative make a positive?</h3>
+    <div class="lede">A rule everyone memorizes and no one is shown. Build the pattern first, then prove it has to be true.</div>
+    <p><strong>Step the staircase.</strong> Each line multiplies by &minus;2, and the first number drops by one each time:</p>
+    <div class="calc stair" id="stair">
+      <span data-i="0" class="on">3 &times; (&minus;2) = &minus;6</span><br>
+      <span data-i="1">2 &times; (&minus;2) = &minus;4</span><br>
+      <span data-i="2">1 &times; (&minus;2) = &minus;2</span><br>
+      <span data-i="3">0 &times; (&minus;2) = &nbsp;0</span><br>
+      <span data-i="4">&minus;1 &times; (&minus;2) = &nbsp;<span id="last">?</span></span>
+    </div>
+    <div class="row">
+      <button class="ui primary" id="stepBtn">Next step ▸</button>
+      <button class="ui" id="proofBtn">Why must it be true? ▸</button>
+    </div>
+    <div class="narr" id="negnarr" aria-live="polite">Each answer climbs by 2 as the first number drops. Keep stepping and predict the last line before it's revealed.</div>
+    <div class="reveal" id="proof">
+      <p>The pattern is convincing — but here's why it <em>can't</em> be anything else. We only need two things the learner already accepts: anything times zero is zero, and multiplication distributes over addition.</p>
+      <div class="calc">
+        Start true: &nbsp; &minus;1 &times; 0 = 0<br>
+        Rewrite 0 as (2 + &minus;2): &nbsp; &minus;1 &times; (2 + &minus;2) = 0<br>
+        Distribute: &nbsp; (&minus;1&times;2) + (&minus;1&times;&minus;2) = 0<br>
+        Simplify: &nbsp; &minus;2 + (&minus;1&times;&minus;2) = 0
+      </div>
+      <p>Read the last line as a question: what must (&minus;1&times;&minus;2) be so that &minus;2 plus it gives 0? It has to be <span class="hl">+2</span>. There's no other choice — the "rule" is forced by arithmetic the learner already believes.</p>
+    </div>
+  </div>
+
+  <!-- ============ MATH 3: DERIVATIVE ============ -->
+  <div class="card">
+    <h3>The derivative, from first principles <span class="tag">A-Level · calculus</span></h3>
+    <div class="lede">Slide the gap <em>h</em> toward zero and watch the secant line become the tangent — while the slope formula simplifies to the exact answer.</div>
+    <svg id="dfig" viewBox="0 0 520 330" role="img" aria-label="A secant line approaching the tangent on y = x squared"></svg>
+    <div class="ctrl"><label>gap &nbsp;h = <span id="hval">1.40</span></label><input type="range" id="h" min="0.05" max="1.4" step="0.05" value="1.4" aria-label="Gap h between the two points on the curve"></div>
+    <div class="calc" id="dalg" style="text-align:center;font-size:13.5px"></div>
+    <div class="narr" id="dnarr" aria-live="polite"></div>
+  </div>
+
+  <!-- ============ MATH 4: ODD NUMBERS VISUAL PROOF ============ -->
+  <div class="card">
+    <h3>Proof you can see: 1 + 3 + 5 + … always makes a square <span class="tag">proof · visual reasoning</span></h3>
+    <div class="lede">My examiner specialty is Further Pure and mathematical proof — but a good proof should be enjoyable for a beginner too. Slide <em>n</em> and watch each odd number wrap the square in a new layer.</div>
+    <svg id="ofig" viewBox="0 0 300 290" role="img" aria-label="Odd numbers building a perfect square"></svg>
+    <div class="ctrl"><label>n = <span id="nval">5</span></label><input type="range" id="n" min="1" max="8" step="1" value="5" aria-label="Number of odd terms n"></div>
+    <div class="calc" id="oalg" style="text-align:center"></div>
+    <div class="narr" id="onarr" aria-live="polite"></div>
+  </div>
+
+  <!-- ============ APPROACH: DESIGNED FOR EVERY LEARNER ============ -->
+  <div class="sec"><h2>Approach · designed for every learner</h2></div>
+  <div class="card">
+    <p style="margin-top:0"><span class="tl" style="font-weight:700">Across the full range of mathematics.</span> From proof and Further Pure — my examiner specialty — and enrichment for high-achievers, through to a new alternative senior course I designed for students on non-traditional pathways. I can stretch the strongest students and build a way in for those the standard route doesn't serve.</p>
+    <p><span class="tl" style="font-weight:700">Built for neurodiverse and mixed-ability learners.</span> I design for mixed-ability and neurodivergent learners from the start, mentor students who've lost confidence in math, and — outside the classroom — have helped families support children with significant learning differences. The approach draws on universal design and accessibility (Accessibility &amp; Inclusive Design, University of Illinois).</p>
+    <p style="margin-bottom:0"><span class="tl" style="font-weight:700">Why the demos look the way they do.</span> These choices aren't decoration: multiple representations — see it, say it, symbolize it — a predictable step-by-step structure, and immediate low-stakes feedback are how I make rigorous mathematics reachable for every learner.</p>
+  </div>
+
+  <!-- ============ COURSE CASE STUDY ============ -->
+  <div class="sec"><h2>Course I designed · Online learning</h2></div>
+  <div class="card">
+    <h3>Getting Started with Web3: Setting Up a Wallet <span class="tag">designed &amp; built</span></h3>
+    <div class="lede">A self-paced module for adult beginners with no technical background (~60 min): scaffolded concept pages, written reflections, formative knowledge checks, and a final assessment. Designed end to end as part of my instructional-design portfolio work (IDOL Academy).</div>
+
+    <p style="color:var(--muted);font-size:13px;margin-top:14px;font-weight:700;letter-spacing:.5px">THE LEARNING PATH — concept → reflect → check, repeated</p>
+    <div class="map">
+      <div class="step"><b>Build the ground</b>What is a blockchain?</div>
+      <div class="step"><b>Introduce the tool</b>What is a Web3 wallet?</div>
+      <div class="step"><b>Connect it up</b>How wallets reach networks &amp; dApps</div>
+      <div class="step"><b>Make it safe</b>Wallet security: seed phrases &amp; keys</div>
+      <div class="step"><b>Situate it</b>Decentralized finance in context</div>
+      <div class="step"><b>Prove it stuck</b>Reflections + final assessment</div>
+    </div>
+    <p style="font-size:13.5px;color:var(--muted)">The module never opens with the tool. It builds the idea first, then introduces the wallet as an <em>access point</em> into that system — every concept page followed by a short reflection or check so understanding is tested while it's fresh.</p>
+
+    <p style="color:var(--muted);font-size:13px;margin-top:16px;font-weight:700;letter-spacing:.5px">SAMPLE CONCEPT PAGE</p>
+    <div class="concept">
+      <h4>What is a blockchain?</h4>
+      <p style="margin-top:0">A blockchain is a distributed digital ledger that records transactions across a network of computers — rather than storing records in one central place, the system shares them among many participants.</p>
+      <p style="margin-bottom:0"><strong>A model the learner can hold onto:</strong></p>
+      <div class="flow">user initiates an action  →  it becomes a transaction  →  the network validates it  →  it's added to the ledger</div>
+    </div>
+
+    <p style="color:var(--muted);font-size:13px;margin-top:16px;font-weight:700;letter-spacing:.5px">FORMATIVE KNOWLEDGE CHECK — try it</p>
+    <div class="quiz" id="quiz">
+      <p class="q" style="font-weight:700">Which action best protects a wallet's seed phrase?</p>
+      <button class="opt" data-ok="1">Storing it securely and keeping it private</button>
+      <button class="opt" data-ok="0">Saving it in a public cloud document</button>
+      <button class="opt" data-ok="0">Sharing it with a trusted contact</button>
+      <button class="opt" data-ok="0">Posting it online for backup</button>
+      <div class="fb ok" id="fbok">✓ Correct. Seed phrases should be stored securely and kept private at all times.</div>
+      <div class="fb no" id="fbno">Not quite — that doesn't reflect safe practice. A seed phrase is the master key; it should never be shared or stored where others can reach it. Try again.</div>
+    </div>
+    <p style="font-size:13.5px;color:var(--muted);margin-top:12px"><strong style="color:#dde7f2">Reflection (text entry, ~5 min):</strong> In 3–5 sentences, explain how a blockchain differs from a traditional centralized system — covering what a distributed ledger is, how validation works, and why it matters for Web3 tools.</p>
+  </div>
+
+  <div class="foot">
+    Approach and authorship: the Web3 module is a course I designed end to end (sequencing, reflections, assessment with feedback); the math interactives are original. <strong>Built to be accessible</strong> — keyboard-navigable, semantic headings, a visible focus indicator, a text description for every visual, live-updating explanations for screen readers, and respect for reduced-motion preferences. Single self-contained page, no libraries.
+  </div>
+</div>
+
+<script>
+/* ---------- Completing the square ---------- */
+(function(){
+  const X=5,S=26,ox=60,oy=40,NS="http://www.w3.org/2000/svg";
+  let stage=0,b=6;
+  const fig=document.getElementById('fig'),narr=document.getElementById('narr'),alg=document.getElementById('alg');
+  function rect(x,y,w,h,fill,o={}){const r=document.createElementNS(NS,'rect');r.setAttribute('x',x);r.setAttribute('y',y);r.setAttribute('width',w);r.setAttribute('height',h);r.setAttribute('rx',2);if(o.dash){r.setAttribute('fill','none');r.setAttribute('stroke','#f4b740');r.setAttribute('stroke-width','2');r.setAttribute('stroke-dasharray','6 5');}else{r.setAttribute('fill',fill);}if(o.stroke){r.setAttribute('stroke',o.stroke);r.setAttribute('stroke-width','1.2');}fig.appendChild(r);}
+  function txt(x,y,s,cls='figsub'){const t=document.createElementNS(NS,'text');t.setAttribute('x',x);t.setAttribute('y',y);t.setAttribute('text-anchor','middle');t.setAttribute('dominant-baseline','middle');t.setAttribute('class',cls);t.textContent=s;fig.appendChild(t);}
+  function draw(){
+    fig.innerHTML='';const half=b/2,xpx=X*S,hpx=half*S,teal='#3cc7bd',strip='#2c8a8f',corner='#f4b740';
+    rect(ox,oy,xpx,xpx,teal);txt(ox+xpx/2,oy+xpx/2,'x²');
+    if(stage===0){
+      rect(ox+xpx+18,oy,b*S,xpx,strip,{stroke:'#0b1428'});txt(ox+xpx+18+(b*S)/2,oy+xpx/2,b+'·x','figlabel');
+      narr.innerHTML=`Start with <span style="color:#3cc7bd">x²</span> and a rectangle that's <b>b</b> wide and <b>x</b> tall — the <b>${b}x</b> term. Together: x² + ${b}x.`;
+    }else{
+      rect(ox+xpx,oy,hpx,xpx,strip,{stroke:'#0b1428'});txt(ox+xpx+hpx/2,oy+xpx/2,half+'·x','figlabel');
+      rect(ox,oy+xpx,xpx,hpx,strip,{stroke:'#0b1428'});txt(ox+xpx/2,oy+xpx+hpx/2,half+'·x','figlabel');
+      if(stage===1)narr.innerHTML=`Cut the rectangle lengthwise and lay the two <b>${half}·x</b> strips along two sides. Same area, rearranged into an L.`;
+      if(stage===2){rect(ox+xpx,oy+xpx,hpx,hpx,corner,{dash:1});txt(ox+xpx+hpx/2,oy+xpx+hpx/2,half+'×'+half,'figlabel');narr.innerHTML=`See the hole? To finish the square you must fill a <span style="color:#f4b740"><b>${half}×${half}</b></span> corner — that's <b>(b/2)² = ${half*half}</b>.`;}
+      if(stage===3){rect(ox+xpx,oy+xpx,hpx,hpx,corner);txt(ox+xpx+hpx/2,oy+xpx+hpx/2,half*half);txt(ox+(xpx+hpx)/2,oy+xpx+hpx+18,'side = x + '+half,'figlabel');narr.innerHTML=`Now it's a full square of side <b>(x + ${half})</b> = <b>(x+${half})²</b>. But you <b>added</b> ${half*half} to get here — so subtract it back to stay equal.`;}
+    }
+    alg.innerHTML = stage<3 ? `x² + ${b}x &nbsp;<span style="color:#9db0c8">= ?</span>` : `x² + ${b}x &nbsp;=&nbsp; <span class="tl">(x + ${half})²</span> <span class="hl">− ${half*half}</span>`;
+  }
+  document.getElementById('stages').addEventListener('click',e=>{if(e.target.dataset.s===undefined)return;stage=+e.target.dataset.s;[...document.querySelectorAll('#stages button')].forEach(x=>x.classList.toggle('active',+x.dataset.s===stage));draw();});
+  document.getElementById('b').addEventListener('input',e=>{b=+e.target.value;document.getElementById('bval').textContent=b;draw();});
+  draw();
+})();
+
+/* ---------- Negative x negative ---------- */
+(function(){
+  let i=0;const spans=[...document.querySelectorAll('#stair span[data-i]')];
+  const last=document.getElementById('last'),narr=document.getElementById('negnarr');
+  document.getElementById('stepBtn').addEventListener('click',()=>{
+    if(i<spans.length-1){i++;spans[i].classList.add('on');
+      if(i===spans.length-1){last.innerHTML='<span class="hl">+2</span>';narr.innerHTML='You predicted it: the pattern forces <span class="hl">+2</span>. A negative times a negative is positive — and it didn’t feel arbitrary, because you saw it coming.';}
+      else narr.innerHTML='Climbing by 2 each step. What has to come next?';
+    }
+  });
+  document.getElementById('proofBtn').addEventListener('click',()=>document.getElementById('proof').classList.toggle('show'));
+})();
+
+/* ---------- Derivative from first principles ---------- */
+(function(){
+  const NS="http://www.w3.org/2000/svg",fig=document.getElementById('dfig');
+  const W=520,H=330,padL=42,padB=40,padT=18,padR=18;
+  const xmin=-0.3,xmax=3.2,ymin=-0.6,ymax=10,a=1.5;
+  const pw=W-padL-padR,ph=H-padT-padB;
+  const X=x=>padL+(x-xmin)/(xmax-xmin)*pw;
+  const Y=y=>(H-padB)-(y-ymin)/(ymax-ymin)*ph;
+  const f=x=>x*x;
+  function line(x1,y1,x2,y2,stroke,w,dash){const l=document.createElementNS(NS,'line');l.setAttribute('x1',x1);l.setAttribute('y1',y1);l.setAttribute('x2',x2);l.setAttribute('y2',y2);l.setAttribute('stroke',stroke);l.setAttribute('stroke-width',w);if(dash)l.setAttribute('stroke-dasharray',dash);fig.appendChild(l);}
+  function dot(x,y,c){const e=document.createElementNS(NS,'circle');e.setAttribute('cx',x);e.setAttribute('cy',y);e.setAttribute('r',5);e.setAttribute('fill',c);fig.appendChild(e);}
+  function txt(x,y,s,c,size){const t=document.createElementNS(NS,'text');t.setAttribute('x',x);t.setAttribute('y',y);t.setAttribute('fill',c);t.setAttribute('font-size',size||12);t.setAttribute('font-family','Helvetica,Arial');t.setAttribute('font-weight','700');t.textContent=s;fig.appendChild(t);}
+  function draw(h){
+    fig.innerHTML='';
+    line(X(xmin),Y(0),X(xmax),Y(0),'#3b4d72',1);
+    line(X(0),Y(ymin),X(0),Y(ymax),'#3b4d72',1);
+    let d='';for(let x=xmin;x<=xmax+1e-9;x+=0.05){d+=(d?'L':'M')+X(x).toFixed(1)+' '+Y(f(x)).toFixed(1)+' ';}
+    const p=document.createElementNS(NS,'path');p.setAttribute('d',d);p.setAttribute('fill','none');p.setAttribute('stroke','#6aa0ff');p.setAttribute('stroke-width','2.5');fig.appendChild(p);
+    const mt=2*a;line(X(xmin),Y(f(a)+mt*(xmin-a)),X(xmax),Y(f(a)+mt*(xmax-a)),'#2c8a8f',1.5,'5 5');
+    const m=2*a+h;line(X(xmin),Y(f(a)+m*(xmin-a)),X(xmax),Y(f(a)+m*(xmax-a)),'#f4b740',2.5);
+    dot(X(a),Y(f(a)),'#3cc7bd');dot(X(a+h),Y(f(a+h)),'#f4b740');
+    txt(X(a)+9,Y(f(a))+4,'P','#eef3f9');txt(X(a+h)+9,Y(f(a+h)),'Q','#eef3f9');
+    document.getElementById('hval').textContent=h.toFixed(2);
+    document.getElementById('dalg').innerHTML='slope = ((a+h)² − a²)/h = (2a·h + h²)/h = <span class="tl">2a + h</span> = 3 + '+h.toFixed(2)+' = <span class="hl">'+m.toFixed(2)+'</span>';
+    document.getElementById('dnarr').innerHTML = h>0.6 ? 'The dashed line is the tangent we’re chasing. Right now the gold secant cuts the curve at two far-apart points, P and Q.' : 'Almost there — the secant has nearly merged with the tangent, and the slope is closing in on <b>3</b> = f′(1.5). That limit <em>is</em> the derivative.';
+  }
+  document.getElementById('h').addEventListener('input',e=>draw(+e.target.value));
+  draw(1.4);
+})();
+
+/* ---------- Odd-numbers visual proof ---------- */
+(function(){
+  const NS="http://www.w3.org/2000/svg",fig=document.getElementById('ofig');
+  const cell=30,ox=30,baseY=270,pal=['#3cc7bd','#f4b740','#6aa0ff','#2c8a8f'];
+  function draw(n){
+    fig.innerHTML='';
+    for(let i=0;i<n;i++)for(let j=0;j<n;j++){
+      const layer=Math.max(i,j)+1;
+      const r=document.createElementNS(NS,'rect');
+      r.setAttribute('x',ox+i*cell);r.setAttribute('y',baseY-(j+1)*cell);
+      r.setAttribute('width',cell);r.setAttribute('height',cell);
+      r.setAttribute('fill',pal[(layer-1)%pal.length]);r.setAttribute('stroke','#0e1730');r.setAttribute('stroke-width','1.5');
+      fig.appendChild(r);
+    }
+    document.getElementById('nval').textContent=n;
+    let terms=[];for(let k=1;k<=n;k++)terms.push(2*k-1);
+    document.getElementById('oalg').innerHTML=terms.join(' + ')+' = <span class="hl">'+(n*n)+'</span> = <span class="tl">'+n+'²</span>';
+    document.getElementById('onarr').innerHTML = n===1 ? 'Start with a single square: 1 = 1².' : 'Each odd number ('+(2*n-1)+' here) adds an L-shaped layer that wraps the previous square — so the running total is always a perfect square.';
+  }
+  document.getElementById('n').addEventListener('input',e=>draw(+e.target.value));
+  draw(5);
+})();
+
+/* ---------- Quiz ---------- */
+(function(){
+  const opts=[...document.querySelectorAll('#quiz .opt')],ok=document.getElementById('fbok'),no=document.getElementById('fbno');
+  opts.forEach(o=>o.addEventListener('click',()=>{
+    opts.forEach(x=>x.classList.remove('correct','wrong'));
+    if(o.dataset.ok==='1'){o.classList.add('correct');ok.classList.add('show');no.classList.remove('show');}
+    else{o.classList.add('wrong');no.classList.add('show');ok.classList.remove('show');}
+  }));
+})();
+</script>
+</body>
+</html>
