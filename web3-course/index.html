@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Getting Started with Web3: Setting Up a Wallet — A Learning-Design Sample by Christopher Welch</title>
+<meta name="description" content="A self-paced online course for adult beginners on Web3 wallets, blockchain, security, and DeFi. An instructional-design sample by Christopher Welch: concept pages, reflections, and interactive knowledge checks.">
+<meta property="og:title" content="Getting Started with Web3: Setting Up a Wallet — Learning-Design Sample">
+<meta property="og:description" content="A self-paced course for adult beginners. Concept pages, reflections, and interactive knowledge checks, designed from a design-based research study.">
+<meta property="og:type" content="website">
+<style>
+  :root{
+    --ink:#16202b; --muted:#52606d; --accent:#1f3a5f; --accent2:#2c6e7f;
+    --rule:#d7dee6; --soft:#eef3f6; --soft2:#f6f9fb; --paper:#ffffff;
+    --good:#1d7a52; --goodbg:#e7f4ee; --bad:#9a3b3b; --badbg:#fbecec;
+    --maxw:880px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important}}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;color:var(--ink);background:var(--soft2);line-height:1.6;font-size:17px}
+  a{color:var(--accent2)}
+  .skip{position:absolute;left:-999px;top:0;background:var(--accent);color:#fff;padding:8px 14px;z-index:100}
+  .skip:focus{left:8px;top:8px}
+  a:focus-visible,button:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #9cc3d1;outline-offset:2px;border-radius:4px}
+
+  /* Hero */
+  header.hero{background:linear-gradient(135deg,var(--accent) 0%,#264a73 60%,var(--accent2) 130%);color:#fff;padding:46px 24px 40px}
+  .hero-in{max-width:var(--maxw);margin:0 auto}
+  .eyebrow{font-size:12px;letter-spacing:2px;text-transform:uppercase;opacity:.85;font-weight:600}
+  header.hero h1{font-size:30px;line-height:1.2;margin:10px 0 6px;font-weight:750}
+  .byline{font-size:15px;opacity:.92}
+  .byline a{color:#cfe6ee}
+  .meta{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+  .pill{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:5px 11px;border-radius:999px;font-size:13px}
+
+  /* Layout */
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  .layout{display:grid;grid-template-columns:230px 1fr;gap:34px;max-width:1180px;margin:0 auto;padding:0 24px;align-items:start}
+  nav.toc{position:sticky;top:18px;align-self:start;font-size:13.5px;padding:18px 0;max-height:calc(100vh - 36px);overflow:auto}
+  nav.toc .lab{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);font-weight:700;margin:0 0 8px 2px}
+  nav.toc ol{list-style:none;counter-reset:step}
+  nav.toc li{counter-increment:step;margin:1px 0}
+  nav.toc a{display:block;color:var(--muted);text-decoration:none;padding:5px 8px 5px 30px;border-radius:6px;position:relative;line-height:1.35}
+  nav.toc a::before{content:counter(step);position:absolute;left:6px;top:5px;width:18px;height:18px;border-radius:50%;background:var(--soft);color:var(--accent);font-size:10.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
+  nav.toc a:hover{background:var(--soft);color:var(--ink)}
+  nav.toc a.active{background:var(--accent);color:#fff;font-weight:600}
+  nav.toc a.active::before{background:#fff;color:var(--accent)}
+  main{min-width:0;padding:26px 0 60px}
+
+  /* Approach card */
+  .approach{background:var(--paper);border:1px solid var(--rule);border-left:4px solid var(--accent2);border-radius:10px;padding:20px 22px;margin-bottom:30px}
+  .approach h2{font-size:17px;color:var(--accent);margin-bottom:8px}
+  .approach p{font-size:14.5px;color:var(--muted);margin-bottom:10px}
+  .approach details{margin-top:6px}
+  .approach summary{cursor:pointer;font-weight:600;color:var(--accent2);font-size:14.5px}
+  .approach ul{margin:10px 0 4px 0;padding-left:20px;font-size:14px;color:var(--muted)}
+  .approach li{margin-bottom:5px}
+  .approach .note{font-size:12.5px;color:var(--muted);font-style:italic;border-top:1px dashed var(--rule);padding-top:10px;margin-top:12px}
+
+  /* Lessons */
+  section.lesson{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:26px 28px;margin-bottom:18px;scroll-margin-top:18px}
+  .kicker{font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:var(--accent2);font-weight:700}
+  section.lesson h2{font-size:22px;color:var(--accent);margin:4px 0 12px;line-height:1.25}
+  section.lesson h3{font-size:15px;color:var(--ink);margin:16px 0 6px;text-transform:uppercase;letter-spacing:.5px}
+  section.lesson p{margin-bottom:12px}
+  section.lesson ul{margin:4px 0 12px;padding-left:22px}
+  section.lesson li{margin-bottom:5px}
+
+  .flow{display:flex;flex-wrap:wrap;align-items:center;gap:8px;background:var(--soft2);border:1px solid var(--rule);border-radius:10px;padding:16px;margin:14px 0;font-size:14px}
+  .flow .step{background:#fff;border:1px solid var(--rule);border-radius:8px;padding:8px 12px;font-weight:600;color:var(--accent)}
+  .flow .arr{color:var(--accent2);font-weight:700}
+
+  figure.fig{margin:16px 0;background:var(--soft2);border:1px solid var(--rule);border-radius:10px;padding:16px 16px 12px}
+  figure.fig svg{display:block;width:100%;height:auto}
+  figure.fig figcaption{font-size:12.5px;color:var(--muted);margin-top:10px;text-align:center;line-height:1.45}
+
+  .twocol{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:8px 0 12px}
+  @media(max-width:620px){.twocol{grid-template-columns:1fr}}
+  .box{border-radius:10px;padding:14px 16px;font-size:14.5px}
+  .box h4{font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px}
+  .box.is{background:var(--goodbg);border:1px solid #bfe0d0}.box.is h4{color:var(--good)}
+  .box.isnot{background:var(--badbg);border:1px solid #eccaca}.box.isnot h4{color:var(--bad)}
+  .box ul{padding-left:18px;margin:0}
+
+  .reflect{background:#fbf8f0;border:1px solid #e8dcc0;border-left:4px solid #c79a3e;border-radius:10px;padding:16px 18px;margin:6px 0 4px}
+  .reflect .tag{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#9a7320;font-weight:700}
+  section.lesson .reflect h3{font-size:15px;margin:3px 0 8px;color:var(--ink);text-transform:none;letter-spacing:0;font-weight:650}
+  .reflect ul{padding-left:20px;font-size:14.5px}
+  .reflect .time{font-size:12.5px;color:var(--muted);font-style:italic;margin-top:8px}
+  .reflect textarea{width:100%;margin-top:10px;border:1px solid var(--rule);border-radius:8px;padding:10px;font-family:inherit;font-size:14px;min-height:78px;resize:vertical}
+
+  /* Knowledge check */
+  .kc{background:var(--soft);border:1px solid var(--rule);border-radius:10px;padding:18px 20px;margin:6px 0 4px}
+  .kc .tag{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--accent2);font-weight:700}
+  .kc .q{font-weight:650;margin:4px 0 12px;font-size:16px}
+  .kc .opts{display:flex;flex-direction:column;gap:8px}
+  .kc button.opt{text-align:left;background:#fff;border:1.5px solid var(--rule);border-radius:8px;padding:11px 14px;font-size:15px;font-family:inherit;color:var(--ink);cursor:pointer;display:flex;gap:10px;align-items:flex-start}
+  .kc button.opt:hover{border-color:var(--accent2)}
+  .kc button.opt:focus-visible{outline:3px solid #9cc3d1;outline-offset:1px}
+  .kc button.opt .mk{flex:0 0 auto;font-weight:700;width:18px}
+  .kc button.opt[disabled]{cursor:default;opacity:.95}
+  .kc button.opt.correct{background:var(--goodbg);border-color:var(--good);color:#0f5e3c}
+  .kc button.opt.wrong{background:var(--badbg);border-color:var(--bad);color:#7d2e2e}
+  .kc .fb{margin-top:11px;font-size:14px;padding:11px 13px;border-radius:8px;display:none}
+  .kc .fb.show{display:block}
+  .kc .fb.ok{background:var(--goodbg);color:#0f5e3c}
+  .kc .fb.no{background:var(--badbg);color:#7d2e2e}
+
+  footer{max-width:var(--maxw);margin:10px auto 60px;padding:0 24px;color:var(--muted);font-size:14px}
+  footer .card{background:var(--paper);border:1px solid var(--rule);border-radius:10px;padding:20px 24px}
+  footer a{font-weight:600}
+  @media(max-width:820px){.layout{grid-template-columns:1fr}nav.toc{position:static;max-height:none;border-bottom:1px solid var(--rule);margin-bottom:6px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#start">Skip to course content</a>
+
+<header class="hero">
+  <div class="hero-in">
+    <div class="eyebrow">Instructional-Design Sample &middot; Self-Paced Online Course</div>
+    <h1>Getting Started with Web3: Setting Up a Wallet</h1>
+    <div class="byline">Designed and built by <strong>Christopher Welch</strong> &middot; <a href="https://cdw3lch.github.io/learning-design-samples/">&larr; Back to portfolio</a></div>
+    <div class="meta">
+      <span class="pill">Audience: adult beginners</span>
+      <span class="pill">~60 minutes</span>
+      <span class="pill">Concept &rarr; reflect &rarr; check</span>
+      <span class="pill">Accessible, keyboard-navigable</span>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+  <nav class="toc" aria-label="Course contents">
+    <p class="lab">Learning path</p>
+    <ol>
+      <li><a href="#welcome">Welcome &amp; Overview</a></li>
+      <li><a href="#blockchain">What Is Blockchain?</a></li>
+      <li><a href="#reflect1">Reflection: Blockchain</a></li>
+      <li><a href="#wallet">What Is a Web3 Wallet?</a></li>
+      <li><a href="#connect">How Wallets Connect</a></li>
+      <li><a href="#check1">Knowledge Check</a></li>
+      <li><a href="#matter">Why Wallets Matter</a></li>
+      <li><a href="#security">Wallet Security Basics</a></li>
+      <li><a href="#reflect2">Reflection: Security</a></li>
+      <li><a href="#check2">Knowledge Check</a></li>
+      <li><a href="#setup">Wallet Setup</a></li>
+      <li><a href="#reflect3">Reflection: Applying</a></li>
+      <li><a href="#check3">Knowledge Check</a></li>
+      <li><a href="#mistakes">Mistakes to Avoid</a></li>
+      <li><a href="#defi">DeFi in Context</a></li>
+      <li><a href="#reflect4">Reflection: Entry Point</a></li>
+      <li><a href="#wrapup">Wrap-Up &amp; Next Steps</a></li>
+    </ol>
+  </nav>
+
+  <main id="start">
+    <div class="approach">
+      <h2>About this sample</h2>
+      <p>This is a self-paced course I designed and built for adult beginners with no technical background. It was developed as my M.Ed. capstone through a design-based research study on how to teach complex technical ideas online. Authored in Canvas and exported as an IMS Common Cartridge for LMS import; this is a faithful web version so you can walk it without an LMS.</p>
+      <details>
+        <summary>The five design principles it is built on</summary>
+        <ul>
+          <li><strong>Begin with a concrete conceptual anchor</strong> rather than abstract definitions.</li>
+          <li><strong>Sequence system relationships progressively</strong>, one connection at a time.</li>
+          <li><strong>Use progressive visual disclosure</strong> instead of dense, all-at-once system diagrams.</li>
+          <li><strong>Prefer targeted application</strong> over broad, open-ended reflection.</li>
+          <li><strong>Match assessment design to the intended depth of learning.</strong></li>
+        </ul>
+        <p class="note">Note on evaluation: the study used simulated learner data, because the free education tier of the authoring LMS was withdrawn partway through the project (completed per faculty guidance). The design and build are real; the outcome figures are not presented as real learner results.</p>
+      </details>
+    </div>
+
+    <section class="lesson" id="welcome">
+      <div class="kicker">Welcome</div>
+      <h2>Welcome &amp; Overview</h2>
+      <p>This short, self-paced module is designed for adult learners who are new to Web3. It introduces foundational blockchain concepts through the lens of digital wallets: their purpose, security considerations, and how you set up and use a wallet to interact with blockchain networks.</p>
+      <h3>By the end, you will be able to</h3>
+      <ul>
+        <li>Describe what a Web3 wallet is and how it connects users to blockchain networks.</li>
+        <li>Identify key wallet security concepts, including seed phrases and private keys.</li>
+        <li>Recognize common mistakes to avoid when setting up and using a digital wallet.</li>
+        <li>Explain how wallets enable interaction with decentralized applications.</li>
+      </ul>
+      <p>No prior experience with Web3 is required. Estimated time: about 60 minutes.</p>
+    </section>
+
+    <section class="lesson" id="blockchain">
+      <div class="kicker">Foundational Concepts</div>
+      <h2>What Is Blockchain?</h2>
+      <p>A blockchain is a distributed digital ledger that records transactions across a network of computers. Rather than storing information in one central place, blockchain systems distribute records among many participants. That makes a blockchain transparent, traceable, and shared, instead of relying on a single central authority.</p>
+      <h3>A model you can hold onto</h3>
+      <figure class="fig">
+        <svg viewBox="0 0 760 132" role="img" aria-labelledby="bcf-t bcf-d" xmlns="http://www.w3.org/2000/svg">
+          <title id="bcf-t">How a blockchain records an action</title>
+          <desc id="bcf-d">A user initiates an action; it becomes a transaction; the network validates it; once validated it is added to the shared ledger.</desc>
+          <defs><marker id="ar1" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2c6e7f"/></marker></defs>
+          <g font-family="-apple-system,Helvetica,Arial,sans-serif">
+            <g><rect x="6" y="26" width="162" height="80" rx="11" fill="#fff" stroke="#d7dee6"/><circle cx="28" cy="48" r="13" fill="#1f3a5f"/><text x="28" y="52.5" text-anchor="middle" font-size="13" fill="#fff" font-weight="700">1</text><text x="87" y="70" text-anchor="middle" font-size="13" fill="#16202b"><tspan x="93" dy="0">A user</tspan><tspan x="93" dy="17">initiates an action</tspan></text></g>
+            <line x1="168" y1="66" x2="200" y2="66" stroke="#2c6e7f" stroke-width="2" marker-end="url(#ar1)"/>
+            <g><rect x="202" y="26" width="162" height="80" rx="11" fill="#fff" stroke="#d7dee6"/><circle cx="224" cy="48" r="13" fill="#1f3a5f"/><text x="224" y="52.5" text-anchor="middle" font-size="13" fill="#fff" font-weight="700">2</text><text x="289" y="70" text-anchor="middle" font-size="13" fill="#16202b"><tspan x="289" dy="0">It becomes</tspan><tspan x="289" dy="17">a transaction</tspan></text></g>
+            <line x1="364" y1="66" x2="396" y2="66" stroke="#2c6e7f" stroke-width="2" marker-end="url(#ar1)"/>
+            <g><rect x="398" y="26" width="162" height="80" rx="11" fill="#fff" stroke="#d7dee6"/><circle cx="420" cy="48" r="13" fill="#1f3a5f"/><text x="420" y="52.5" text-anchor="middle" font-size="13" fill="#fff" font-weight="700">3</text><text x="485" y="70" text-anchor="middle" font-size="13" fill="#16202b"><tspan x="485" dy="0">The network</tspan><tspan x="485" dy="17">validates it</tspan></text></g>
+            <line x1="560" y1="66" x2="592" y2="66" stroke="#2c6e7f" stroke-width="2" marker-end="url(#ar1)"/>
+            <g><rect x="594" y="26" width="160" height="80" rx="11" fill="#eef3f6" stroke="#2c6e7f"/><circle cx="616" cy="48" r="13" fill="#2c6e7f"/><text x="616" y="52.5" text-anchor="middle" font-size="13" fill="#fff" font-weight="700">4</text><text x="681" y="70" text-anchor="middle" font-size="13" fill="#16202b"><tspan x="679" dy="0">It is added</tspan><tspan x="679" dy="17">to the ledger</tspan></text></g>
+          </g>
+        </svg>
+        <figcaption>Every change is validated by the network before it joins the shared, distributed ledger.</figcaption>
+      </figure>
+      <p>Understanding this flow builds the background you need to see <em>why</em> Web3 wallets exist and how they function in decentralized environments.</p>
+    </section>
+
+    <section class="lesson reflect-wrap" id="reflect1">
+      <div class="reflect">
+        <div class="tag">Reflection 1 &middot; Blockchain Concepts</div>
+        <h3>In 3 to 5 sentences, explain how a blockchain differs from a traditional centralized system for storing or verifying information.</h3>
+        <p>Address each of these:</p>
+        <ul>
+          <li>What a distributed ledger is.</li>
+          <li>How validation works at a basic level.</li>
+          <li>Why this matters for understanding Web3 tools.</li>
+        </ul>
+        <textarea aria-label="Your reflection (not saved)" placeholder="Type your response here. (Demo only — not saved.)"></textarea>
+        <div class="time">Spend about 5 minutes before moving on.</div>
+      </div>
+    </section>
+
+    <section class="lesson" id="wallet">
+      <div class="kicker">Core Concept</div>
+      <h2>What Is a Web3 Wallet?</h2>
+      <p>A Web3 wallet is a digital tool that lets you interact with blockchain-based applications and services. Unlike a traditional online account, it is designed to give you direct control over your digital assets and access credentials.</p>
+      <div class="twocol">
+        <div class="box is"><h4>A wallet is used to</h4><ul><li>Store and manage access to digital assets</li><li>Connect to decentralized applications</li><li>Sign transactions securely</li></ul></div>
+        <div class="box isnot"><h4>A wallet does not</h4><ul><li>Hold physical currency</li><li>Act as a bank account</li><li>Automatically protect you from mistakes or scams</li></ul></div>
+      </div>
+      <p>Because wallets connect you to blockchain networks and decentralized applications, understanding how they work, and how to use them safely, is essential.</p>
+    </section>
+
+    <section class="lesson" id="connect">
+      <div class="kicker">How It Works</div>
+      <h2>How Wallets Connect Users to Blockchain Networks</h2>
+      <p>A Web3 wallet acts as the connection point between you and a blockchain network. When you want to interact with a decentralized application, the wallet helps authenticate you and approve transactions using cryptographic credentials, all without functioning like a traditional bank account.</p>
+      <h3>The key relationship</h3>
+      <p>The wallet is <strong>not</strong> the blockchain itself. It is a tool for accessing and interacting with blockchain-based systems. Many people recognize the word "wallet" but miss this role; seeing it clearly is what builds a durable mental model.</p>
+      <figure class="fig">
+        <svg viewBox="0 0 760 220" role="img" aria-labelledby="hub-t hub-d" xmlns="http://www.w3.org/2000/svg">
+          <title id="hub-t">The wallet as an access point</title>
+          <desc id="hub-d">You connect through a Web3 wallet, which links you to the blockchain network, to decentralized applications, and lets you sign and authorize actions. The wallet is the access point, not the blockchain itself.</desc>
+          <defs><marker id="ar2" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2c6e7f"/></marker></defs>
+          <g font-family="-apple-system,Helvetica,Arial,sans-serif">
+            <circle cx="64" cy="110" r="42" fill="#eef3f6" stroke="#2c6e7f" stroke-width="1.5"/>
+            <text x="64" y="115" text-anchor="middle" font-size="15" font-weight="700" fill="#1f3a5f">You</text>
+            <line x1="108" y1="110" x2="282" y2="110" stroke="#2c6e7f" stroke-width="2" marker-end="url(#ar2)"/>
+            <rect x="286" y="78" width="170" height="64" rx="12" fill="#1f3a5f"/>
+            <text x="371" y="106" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">Web3 Wallet</text>
+            <text x="371" y="125" text-anchor="middle" font-size="11" fill="#cfe0ea">your access point</text>
+            <line x1="456" y1="110" x2="556" y2="38" stroke="#2c6e7f" stroke-width="2" marker-end="url(#ar2)"/>
+            <line x1="456" y1="110" x2="556" y2="110" stroke="#2c6e7f" stroke-width="2" marker-end="url(#ar2)"/>
+            <line x1="456" y1="110" x2="556" y2="182" stroke="#2c6e7f" stroke-width="2" marker-end="url(#ar2)"/>
+            <rect x="560" y="15" width="192" height="46" rx="8" fill="#fff" stroke="#d7dee6"/><text x="656" y="42" text-anchor="middle" font-size="12.5" fill="#16202b">Blockchain network</text>
+            <rect x="560" y="87" width="192" height="46" rx="8" fill="#fff" stroke="#d7dee6"/><text x="656" y="114" text-anchor="middle" font-size="12.5" fill="#16202b">Decentralized apps (dApps)</text>
+            <rect x="560" y="159" width="192" height="46" rx="8" fill="#fff" stroke="#d7dee6"/><text x="656" y="186" text-anchor="middle" font-size="12.5" fill="#16202b">Sign &amp; authorize actions</text>
+          </g>
+        </svg>
+        <figcaption>The wallet sits between you and the network. It is how you reach blockchain systems, not the blockchain itself.</figcaption>
+      </figure>
+    </section>
+
+    <section class="lesson" id="check1">
+      <div class="kc" data-answer="0">
+        <div class="tag">Knowledge Check &middot; Web3 Wallet Basics</div>
+        <div class="q">What is the primary purpose of a Web3 wallet?</div>
+        <div class="opts">
+          <button class="opt"><span class="mk">A</span><span>To manage access to digital assets and applications</span></button>
+          <button class="opt"><span class="mk">B</span><span>To store physical money</span></button>
+          <button class="opt"><span class="mk">C</span><span>To act as a traditional bank account</span></button>
+          <button class="opt"><span class="mk">D</span><span>To automatically prevent scams</span></button>
+        </div>
+        <div class="fb ok" role="status">Correct. A Web3 wallet manages access to digital assets and lets you interact with decentralized applications.</div>
+        <div class="fb no" role="status">Not quite. A wallet manages access to digital assets and applications; it does not hold physical money, act as a bank, or prevent scams on its own. Try again.</div>
+      </div>
+    </section>
+
+    <section class="lesson" id="matter">
+      <div class="kicker">Why It Matters</div>
+      <h2>Why Digital Wallets Matter</h2>
+      <p>Digital wallets are central to how people interact with Web3. Unlike traditional online accounts, they are designed to give individuals direct ownership and control. Wallets matter because they:</p>
+      <ul>
+        <li>Let you own and manage access to digital assets.</li>
+        <li>Let you connect directly to decentralized applications.</li>
+        <li>Place responsibility for security and decision-making with you.</li>
+      </ul>
+      <p>Because there is no central authority managing access, understanding how wallets work, and how to use them safely, is an essential first step.</p>
+    </section>
+
+    <section class="lesson" id="security">
+      <div class="kicker">Security</div>
+      <h2>Wallet Security Basics</h2>
+      <p>Security is one of the most important aspects of using a Web3 wallet. Because a wallet provides direct access, you are responsible for protecting your information.</p>
+      <h3>Key concepts</h3>
+      <ul>
+        <li><strong>Seed phrase:</strong> a series of words that grants access to a wallet. Keep it private and stored securely.</li>
+        <li><strong>Private key:</strong> a cryptographic key that authorizes actions. Anyone with it can control the wallet.</li>
+        <li><strong>User responsibility:</strong> mistakes cannot always be reversed, so caution is essential.</li>
+      </ul>
+      <p>To reduce risk: avoid sharing sensitive information, be cautious with unknown links, and follow recommended security practices when setting up and using a wallet.</p>
+    </section>
+
+    <section class="lesson reflect-wrap" id="reflect2">
+      <div class="reflect">
+        <div class="tag">Reflection 2 &middot; Wallet Security and Responsibility</div>
+        <h3>In 3 to 5 sentences, explain why wallet security is such an important part of using Web3 tools responsibly.</h3>
+        <p>Address each of these:</p>
+        <ul>
+          <li>The role of seed phrases or private keys.</li>
+          <li>One risk a beginner might face.</li>
+          <li>How wallet security differs from what people expect in traditional systems.</li>
+        </ul>
+        <textarea aria-label="Your reflection (not saved)" placeholder="Type your response here. (Demo only — not saved.)"></textarea>
+        <div class="time">Spend about 5 to 7 minutes before moving on.</div>
+      </div>
+    </section>
+
+    <section class="lesson" id="check2">
+      <div class="kc" data-answer="0">
+        <div class="tag">Knowledge Check &middot; Wallet Security</div>
+        <div class="q">Which action best protects a wallet's seed phrase?</div>
+        <div class="opts">
+          <button class="opt"><span class="mk">A</span><span>Storing it securely and keeping it private</span></button>
+          <button class="opt"><span class="mk">B</span><span>Saving it in a public cloud document</span></button>
+          <button class="opt"><span class="mk">C</span><span>Sharing it with a trusted contact</span></button>
+          <button class="opt"><span class="mk">D</span><span>Posting it online for backup</span></button>
+        </div>
+        <div class="fb ok" role="status">Correct. Seed phrases should be stored securely and kept private at all times.</div>
+        <div class="fb no" role="status">That doesn't reflect safe practice. A seed phrase is the master key; it should never be shared or stored where others can reach it. Try again.</div>
+      </div>
+    </section>
+
+    <section class="lesson" id="setup">
+      <div class="kicker">Process</div>
+      <h2>Overview of Wallet Setup</h2>
+      <p>Understanding the setup process shows how access, identity, and security work together in Web3. Specific tools differ, but the overall process is similar across most wallet platforms. A general setup includes:</p>
+      <ul>
+        <li>Choosing a wallet application or tool</li>
+        <li>Creating a new wallet</li>
+        <li>Generating and securely storing a seed phrase</li>
+        <li>Setting access controls, such as passwords or device security</li>
+        <li>Confirming the wallet setup before use</li>
+      </ul>
+      <figure class="fig">
+        <svg viewBox="0 0 760 118" role="img" aria-labelledby="stp-t stp-d" xmlns="http://www.w3.org/2000/svg">
+          <title id="stp-t">A general wallet setup process</title>
+          <desc id="stp-d">Five steps: choose a wallet, create a new wallet, securely save the seed phrase, set access controls, and confirm setup. Saving the seed phrase securely is the critical step.</desc>
+          <g font-family="-apple-system,Helvetica,Arial,sans-serif">
+            <line x1="80" y1="38" x2="680" y2="38" stroke="#d7dee6" stroke-width="3"/>
+            <g><circle cx="80" cy="38" r="22" fill="#1f3a5f"/><text x="80" y="43" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">1</text><text x="80" y="78" text-anchor="middle" font-size="11.5" fill="#16202b"><tspan x="80" dy="0">Choose a</tspan><tspan x="80" dy="14">wallet</tspan></text></g>
+            <g><circle cx="230" cy="38" r="22" fill="#1f3a5f"/><text x="230" y="43" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">2</text><text x="230" y="78" text-anchor="middle" font-size="11.5" fill="#16202b"><tspan x="230" dy="0">Create a</tspan><tspan x="230" dy="14">new wallet</tspan></text></g>
+            <g><circle cx="380" cy="38" r="24" fill="#2c6e7f"/><text x="380" y="43.5" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">3</text><text x="380" y="79" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1f3a5f"><tspan x="380" dy="0">Save seed phrase</tspan><tspan x="380" dy="14">securely</tspan></text></g>
+            <g><circle cx="530" cy="38" r="22" fill="#1f3a5f"/><text x="530" y="43" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">4</text><text x="530" y="78" text-anchor="middle" font-size="11.5" fill="#16202b"><tspan x="530" dy="0">Set access</tspan><tspan x="530" dy="14">controls</tspan></text></g>
+            <g><circle cx="680" cy="38" r="22" fill="#1f3a5f"/><text x="680" y="43" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">5</text><text x="680" y="78" text-anchor="middle" font-size="11.5" fill="#16202b"><tspan x="680" dy="0">Confirm</tspan><tspan x="680" dy="14">setup</tspan></text></g>
+          </g>
+        </svg>
+        <figcaption>The teal step is the one that matters most: a seed phrase stored securely is what protects the wallet.</figcaption>
+      </figure>
+      <p>This module covers the process at a high level. No real funds or live wallet accounts are used in this learning experience.</p>
+    </section>
+
+    <section class="lesson reflect-wrap" id="reflect3">
+      <div class="reflect">
+        <div class="tag">Reflection 3 &middot; Applying Wallet Concepts</div>
+        <p><strong>Scenario:</strong> a new learner wants to connect a Web3 wallet to a decentralized application for the first time. They have heard of wallets, seed phrases, and blockchain, but do not fully understand how these concepts relate.</p>
+        <h3>In 4 to 6 sentences, respond to the following:</h3>
+        <ul>
+          <li>What role does the wallet play between the user and the blockchain network?</li>
+          <li>Why is it important to understand private keys or seed phrases before taking action?</li>
+          <li>How does this example show that wallets are part of a broader blockchain system, not just a standalone tool?</li>
+        </ul>
+        <textarea aria-label="Your reflection (not saved)" placeholder="Type your response here. (Demo only — not saved.)"></textarea>
+        <div class="time">Spend about 8 to 10 minutes before moving on.</div>
+      </div>
+    </section>
+
+    <section class="lesson" id="check3">
+      <div class="kc" data-answer="0">
+        <div class="tag">Knowledge Check &middot; Wallet Setup Process</div>
+        <div class="q">Which step is most important to complete during wallet setup?</div>
+        <div class="opts">
+          <button class="opt"><span class="mk">A</span><span>Securely storing the seed phrase</span></button>
+          <button class="opt"><span class="mk">B</span><span>Posting the seed phrase online</span></button>
+          <button class="opt"><span class="mk">C</span><span>Sharing the wallet credentials</span></button>
+          <button class="opt"><span class="mk">D</span><span>Skipping security steps</span></button>
+        </div>
+        <div class="fb ok" role="status">Correct. Securely storing the seed phrase is a critical part of wallet setup.</div>
+        <div class="fb no" role="status">That doesn't reflect recommended setup steps. The seed phrase must be stored securely and never shared or exposed. Try again.</div>
+      </div>
+    </section>
+
+    <section class="lesson" id="mistakes">
+      <div class="kicker">Caution</div>
+      <h2>Common Wallet Mistakes to Avoid</h2>
+      <p>Many wallet problems come from simple mistakes. Knowing the common risks helps reduce the chance of loss or unauthorized access.</p>
+      <ul>
+        <li>Sharing seed phrases or private keys with others</li>
+        <li>Clicking unknown or suspicious links</li>
+        <li>Storing sensitive information in unsecured locations</li>
+        <li>Assuming mistakes can always be reversed</li>
+      </ul>
+      <p>Recognizing these risks reinforces the importance of caution and responsible wallet use.</p>
+    </section>
+
+    <section class="lesson" id="defi">
+      <div class="kicker">The Bigger Picture</div>
+      <h2>Decentralized Finance in Context</h2>
+      <p>Decentralized finance (DeFi) refers to blockchain-based financial tools and services that operate without a traditional centralized intermediary such as a bank. DeFi tools may let users exchange assets, lend, borrow, or interact with digital financial systems through decentralized applications.</p>
+      <p>Web3 wallets play a central role: they let users connect to decentralized applications and authorize actions on blockchain networks. In that sense, wallets are not the final destination of learning, they are one of the main access points into broader blockchain ecosystems.</p>
+      <p>A wallet is not just a standalone tool. It is part of a system that includes users, blockchain networks, decentralized applications, and the rules that govern digital interactions. Seeing that relationship connects foundational wallet concepts to larger ideas: user responsibility, network validation, digital ownership, and decentralized participation.</p>
+      <figure class="fig">
+        <svg viewBox="0 0 760 176" role="img" aria-labelledby="defi-t defi-d" xmlns="http://www.w3.org/2000/svg">
+          <title id="defi-t">Where the wallet fits in DeFi</title>
+          <desc id="defi-d">On the blockchain network, you and your wallet connect to decentralized applications, which is where DeFi actions such as exchanging assets, lending, and borrowing take place.</desc>
+          <defs><marker id="ar4" markerWidth="9" markerHeight="9" refX="6.5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#2c6e7f"/></marker></defs>
+          <g font-family="-apple-system,Helvetica,Arial,sans-serif">
+            <rect x="6" y="8" width="748" height="160" rx="14" fill="#f6f9fb" stroke="#d7dee6"/>
+            <text x="22" y="28" font-size="11" letter-spacing="1" fill="#52606d" font-weight="700">ON THE BLOCKCHAIN NETWORK</text>
+            <rect x="28" y="62" width="150" height="62" rx="11" fill="#1f3a5f"/><text x="103" y="89" text-anchor="middle" font-size="14" font-weight="700" fill="#fff">You + Wallet</text><text x="103" y="107" text-anchor="middle" font-size="10.5" fill="#cfe0ea">your access point</text>
+            <line x1="178" y1="93" x2="300" y2="93" stroke="#2c6e7f" stroke-width="2" marker-end="url(#ar4)"/>
+            <rect x="304" y="62" width="156" height="62" rx="11" fill="#fff" stroke="#2c6e7f" stroke-width="1.5"/><text x="382" y="89" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1f3a5f">Decentralized</text><text x="382" y="107" text-anchor="middle" font-size="13.5" font-weight="700" fill="#1f3a5f">apps (dApps)</text>
+            <line x1="460" y1="93" x2="556" y2="50" stroke="#2c6e7f" stroke-width="2" marker-end="url(#ar4)"/>
+            <line x1="460" y1="93" x2="556" y2="93" stroke="#2c6e7f" stroke-width="2" marker-end="url(#ar4)"/>
+            <line x1="460" y1="93" x2="556" y2="136" stroke="#2c6e7f" stroke-width="2" marker-end="url(#ar4)"/>
+            <rect x="560" y="33" width="170" height="34" rx="17" fill="#eef3f6" stroke="#cfe0ea"/><text x="645" y="55" text-anchor="middle" font-size="12.5" fill="#16202b">Exchange assets</text>
+            <rect x="560" y="76" width="170" height="34" rx="17" fill="#eef3f6" stroke="#cfe0ea"/><text x="645" y="98" text-anchor="middle" font-size="12.5" fill="#16202b">Lend</text>
+            <rect x="560" y="119" width="170" height="34" rx="17" fill="#eef3f6" stroke="#cfe0ea"/><text x="645" y="141" text-anchor="middle" font-size="12.5" fill="#16202b">Borrow</text>
+          </g>
+        </svg>
+        <figcaption>The wallet is the entry point: it connects you to dApps, where DeFi actions like exchanging, lending, and borrowing happen.</figcaption>
+      </figure>
+    </section>
+
+    <section class="lesson reflect-wrap" id="reflect4">
+      <div class="reflect">
+        <div class="tag">Reflection 4 &middot; Wallets as an Entry Point</div>
+        <h3>In 3 to 4 sentences, explain why a Web3 wallet can be understood as an entry point into broader blockchain and DeFi systems rather than simply a storage tool.</h3>
+        <p>Address each of these:</p>
+        <ul>
+          <li>How a wallet connects a user to blockchain-based systems.</li>
+          <li>One example of an action a wallet helps authorize or enable.</li>
+          <li>Why understanding this broader role matters for new learners.</li>
+        </ul>
+        <textarea aria-label="Your reflection (not saved)" placeholder="Type your response here. (Demo only — not saved.)"></textarea>
+        <div class="time">Spend about 5 to 7 minutes before moving on.</div>
+      </div>
+    </section>
+
+    <section class="lesson" id="wrapup">
+      <div class="kicker">Wrap-Up</div>
+      <h2>Wrap-Up &amp; Next Steps</h2>
+      <p>You have completed this introductory module on Web3 wallets. You should now have a clearer understanding of what a Web3 wallet is, why wallet security matters, and the basic steps for setting one up. You are now able to:</p>
+      <ul>
+        <li>Explain the purpose of a Web3 wallet.</li>
+        <li>Identify key security concepts, including seed phrases and private keys.</li>
+        <li>Recognize common mistakes to avoid when using a digital wallet.</li>
+        <li>Describe how wallets enable interaction with blockchain networks and decentralized applications.</li>
+      </ul>
+      <p>This foundational knowledge can help you approach blockchain and Web3 tools more confidently and responsibly. To continue, explore resources on wallet best practices, security awareness, and safe participation in Web3 environments.</p>
+    </section>
+
+    <footer>
+      <div class="card">
+        <p><strong>About this sample.</strong> Designed and built by Christopher Welch as an instructional-design portfolio piece (M.Ed. capstone, design-based research). The original is authored in Canvas and available as an IMS Common Cartridge for LMS import; this is a self-contained web version. Built to be accessible: semantic structure, keyboard-navigable checks, visible focus, and reduced-motion support.</p>
+        <p style="margin-top:10px">More work: <a href="https://cdw3lch.github.io/learning-design-samples/">Interactive math &amp; learning-design portfolio</a> &middot; <a href="https://linkedin.com/in/christopher-d-welch">LinkedIn</a></p>
+      </div>
+    </footer>
+  </main>
+</div>
+
+<script>
+  // Interactive knowledge checks
+  document.querySelectorAll('.kc').forEach(function(kc){
+    var ans=parseInt(kc.getAttribute('data-answer'),10);
+    var opts=kc.querySelectorAll('.opt');
+    var fbOk=kc.querySelector('.fb.ok'), fbNo=kc.querySelector('.fb.no');
+    opts.forEach(function(btn,i){
+      btn.addEventListener('click',function(){
+        fbOk.classList.remove('show'); fbNo.classList.remove('show');
+        opts.forEach(function(b){b.classList.remove('wrong');});
+        if(i===ans){
+          btn.classList.add('correct');
+          opts.forEach(function(b){b.disabled=true;});
+          fbOk.classList.add('show');
+        } else {
+          btn.classList.add('wrong');
+          fbNo.classList.add('show');
+        }
+      });
+    });
+  });
+
+  // Scrollspy for the contents nav
+  var links=Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
+  var map={};
+  links.forEach(function(a){var id=a.getAttribute('href').slice(1);map[id]=a;});
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(a){a.classList.remove('active');});
+        var a=map[e.target.id]; if(a)a.classList.add('active');
+      }
+    });
+  },{rootMargin:'-20% 0px -70% 0px'});
+  document.querySelectorAll('section.lesson[id]').forEach(function(s){obs.observe(s);});
+</script>
+</body>
+</html>
